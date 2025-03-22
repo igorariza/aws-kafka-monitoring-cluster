@@ -24,6 +24,8 @@ services:
         max-size: "10m"
         max-file: "1"
         tag: "node-exporter"
+    networks:
+      - kafka-net
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
@@ -44,3 +46,5 @@ services:
         max-size: "10m"
         max-file: "1"
         tag: "cadvisor"
+    networks:
+      - kafka-net

@@ -13,6 +13,8 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus-data:/prometheus
+    networks:
+      - kafka-net
 
   init-grafana:
     image: debian:bookworm-slim
@@ -27,6 +29,8 @@ services:
     user: root
     volumes:
       - ./grafana-data:/var/lib/grafana
+    networks:
+      - kafka-net
 
   prometheus:
     image: prom/prometheus
@@ -40,6 +44,8 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus-data:/prometheus
+    networks:
+      - kafka-net
 
   grafana:
     image: grafana/grafana
@@ -54,6 +60,8 @@ services:
       - "18080:3000"
     volumes:
       - ./grafana-data:/var/lib/grafana
+    networks:
+      - kafka-net
 
   kafdrop:
     image: obsidiandynamics/kafdrop
@@ -65,3 +73,5 @@ services:
       JVM_OPTS: "-Xms200M -Xmx400M"
       KAFKA_BROKERCONNECT: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
       SERVER_SERVLET_CONTEXTPATH: "/"
+    networks:
+      - kafka-net

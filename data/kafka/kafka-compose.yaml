@@ -10,6 +10,8 @@ services:
         chown -R 1001:1001 /bitnami/kafka
     volumes:
       - /srv/kafka/data:/bitnami/kafka  
+    networks:
+      - kafka-net
 
   lumu-kafka-broker:
     image: lumutools/tecnical-test-kafka:3.6.1-debian-12-r14
@@ -48,3 +50,9 @@ services:
       - "6500:6500"
       - "9092:9092"
       - "9094:9094"
+    networks:
+      - kafka-net
+
+networks:
+  kafka-net:
+    driver: bridge

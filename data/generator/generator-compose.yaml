@@ -12,6 +12,10 @@ services:
     environment:
       BOOTSTRAP_SERVER: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
       TOPIC_NAME: basic
+    extra_hosts:
+      - "kafka1.test.lumu.net:10.123.245.157"
+      - "kafka2.test.lumu.net:10.123.245.166"
+      - "kafka3.test.lumu.net:10.123.245.184"
 
   kafka-consumer:
     image: edenhill/kcat:1.7.1
@@ -31,3 +35,7 @@ services:
       BOOTSTRAP_SERVER: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
       GROUP_ID: reader-group-id
       TOPIC_NAME: basic
+    extra_hosts:
+      - "kafka1.test.lumu.net:10.123.245.157"
+      - "kafka2.test.lumu.net:10.123.245.166"
+      - "kafka3.test.lumu.net:10.123.245.184"

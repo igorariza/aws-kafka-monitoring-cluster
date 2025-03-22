@@ -19,15 +19,15 @@ services:
         condition: service_completed_successfully
         
     restart: always
-    hostname: "${BR0_HOSTNAME}"
+    hostname: kafka1.test.lumu.net
     volumes:
       - /srv/kafka/data:/bitnami/kafka
     environment:
       KAFKA_OPTS: "-javaagent:/opt/bitnami/kafka/jmx_prometheus_javaagent.jar=6500:/opt/bitnami/kafka/prom-jmx-agent-config.yml"
       ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://${BR0_HOSTNAME}:9092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://kafka1.test.lumu.net:9092,HOST://localhost:9092,DOCKER://lumu-kafka-broker:9093"
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_CFG_BROKER_RACK: "${BRO_RACK}"
+      KAFKA_CFG_BROKER_RACK: "us-east-1"
       KAFKA_CFG_DEFAULT_REPLICATION_FACTOR: "2"
       KAFKA_CFG_LOG_RETENTION_HOURS: "72"
       KAFKA_CFG_MESSAGE_MAX_BYTES: "4096000"

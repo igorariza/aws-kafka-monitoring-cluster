@@ -14,8 +14,7 @@ scrape_configs:
       - targets: ['node-exporter:6551']
   - job_name: 'cadvisor'
     static_configs:
-      - targets: ['cadvisor:6550']
+      - targets: ['cadvisor-exporter:6550']
   - job_name: 'kafka'
     static_configs:
       - targets: ['lumu-kafka-broker:6500']
-

@@ -35,6 +35,8 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - kafka-net
     ports:
       - 6550:8080
     restart: always
@@ -46,6 +48,4 @@ services:
         max-size: "10m"
         max-file: "1"
         tag: "cadvisor"
-    networks:
-      - kafka-net
     

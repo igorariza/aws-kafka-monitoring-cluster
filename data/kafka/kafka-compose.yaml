@@ -24,7 +24,7 @@ services:
     environment:
       KAFKA_OPTS: "-javaagent:/opt/bitnami/kafka/jmx_prometheus_javaagent.jar=6500:/opt/bitnami/kafka/prom-jmx-agent-config.yml"
       ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://kafka1.test.lumu.net:9092,DOCKER://lumu-kafka-broker:9093"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://kafka1.test.lumu.net:9092,DOCKER://lumu-kafka-broker:9094"
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_CFG_BROKER_RACK: "us-east-1"
       KAFKA_CFG_DEFAULT_REPLICATION_FACTOR: "2"
@@ -40,11 +40,11 @@ services:
       KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka1.test.lumu.net:9093,2@kafka2.test.lumu.net:9093,3@kafka3.test.lumu.net:9093"
       KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,CONTROLLER:PLAINTEXT,DOCKER:PLAINTEXT"
-      KAFKA_CFG_LISTENERS: "CONTROLLER://:9093,CLIENT://:9092,DOCKER://:9093"
+      KAFKA_CFG_LISTENERS: "CONTROLLER://:9093,CLIENT://:9092,DOCKER://:9094"
       KAFKA_CFG_NODE_ID: "${BRO_KAFKA_NODE_ID}"
       KAFKA_CFG_PROCESS_ROLES: "controller,broker"
       KAFKA_KRAFT_CLUSTER_ID: "${KRAFT_CLUSTER_ID}"
     ports:
       - "6500:6500"
       - "9092:9092"
-      - "9093:9093"
+      - "9094:9094"

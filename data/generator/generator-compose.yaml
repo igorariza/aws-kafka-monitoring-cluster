@@ -1,0 +1,33 @@
+services:
+  kafka-producer:
+    image: lumutools/tecnical-test-producer:1.0.0
+    container_name: kafka-producer
+    restart: always
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - |
+        /opt/logger.sh 5 10
+    environment:
+      BOOTSTRAP_SERVER: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
+      TOPIC_NAME: basic
+
+  kafka-consumer:
+    image: edenhill/kcat:1.7.1
+    container_name: kafka-consumer
+    restart: always
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - |
+        kcat \
+          -b $${BOOTSTRAP_SERVER} \
+          -G $${GROUP_ID} \
+          -D \n\n \
+          -q $${TOPIC_NAME}
+    environment:
+      BOOTSTRAP_SERVER: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
+      GROUP_ID: reader-group-id
+      TOPIC_NAME: basic

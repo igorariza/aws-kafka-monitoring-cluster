@@ -1,0 +1,51 @@
+services:
+  init-lumu-kafka-broker:
+    image: debian:bookworm-slim
+    restart: no
+    tty: true
+    command:
+      - bash
+      - -c
+      - |
+        chown -R 1001:1001 /bitnami/kafka
+    volumes:
+      - /srv/kafka/data:/bitnami/kafka  
+
+  lumu-kafka-broker:
+    image: lumutools/tecnical-test-kafka:3.6.1-debian-12-r14
+    container_name: lumu-kafka-broker
+    depends_on:
+      init-lumu-kafka-broker:
+        condition: service_completed_successfully
+        
+    restart: always
+    hostname: "${BR0_HOSTNAME}"
+    volumes:
+      - /srv/kafka/data:/bitnami/kafka
+    environment:
+      KAFKA_OPTS: "-javaagent:/opt/bitnami/kafka/jmx_prometheus_javaagent.jar=6500:/opt/bitnami/kafka/prom-jmx-agent-config.yml"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://${BR0_HOSTNAME}:9092"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_CFG_BROKER_RACK: "${BRO_RACK}"
+      KAFKA_CFG_DEFAULT_REPLICATION_FACTOR: "2"
+      KAFKA_CFG_LOG_RETENTION_HOURS: "72"
+      KAFKA_CFG_MESSAGE_MAX_BYTES: "4096000"
+      KAFKA_CFG_NUM_PARTITIONS: "30"
+      KAFKA_CFG_PORT: "9092"
+      KAFKA_CFG_REPLICA_SELECTOR_CLASS: "org.apache.kafka.common.replica.RackAwareReplicaSelector"
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_HEAP_OPTS: "-Xmx256m -Xms256m"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "CLIENT"
+      ## --> KRaft settings
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka1.test.lumu.net:9093,2@kafka2.test.lumu.net:9093,3@kafka3.test.lumu.net:9093"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,CONTROLLER:PLAINTEXT"
+      KAFKA_CFG_LISTENERS: "CONTROLLER://:9093,CLIENT://:9092"
+      KAFKA_CFG_NODE_ID: "${BRO_KAFKA_NODE_ID}"
+      KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+      KAFKA_KRAFT_CLUSTER_ID: "${KRAFT_CLUSTER_ID}"
+    ports:
+      - "6500:6500"
+      - "9092:9092"
+      - "9093:9093"

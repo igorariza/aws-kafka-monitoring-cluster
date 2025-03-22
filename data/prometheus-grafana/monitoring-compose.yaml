@@ -1,0 +1,67 @@
+services:
+  init-prometheus:
+    image: debian:bookworm-slim
+    container_name: init-prometheus
+    restart: no
+    tty: true
+    command:
+      - bash
+      - -c
+      - |
+        chown -R 65534:65534 /etc/prometheus/prometheus.yml /prometheus
+    user: root
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus-data:/prometheus
+
+  init-grafana:
+    image: debian:bookworm-slim
+    container_name: init-grafana
+    restart: no
+    tty: true
+    command:
+      - bash
+      - -c
+      - |
+        chown -R 472:472 /var/lib/grafana
+    user: root
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    depends_on:
+      init-prometheus:
+        condition: service_completed_successfully
+    restart: always
+    ports:
+      - "28080:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      prometheus:
+        condition: service_started
+      init-grafana:
+        condition: service_completed_successfully
+    restart: always
+    ports:
+      - "18080:3000"
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    restart: always
+    ports:
+      - "38080:9000"
+    environment:
+      JVM_OPTS: "-Xms200M -Xmx400M"
+      KAFKA_BROKERCONNECT: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
+      SERVER_SERVLET_CONTEXTPATH: "/"

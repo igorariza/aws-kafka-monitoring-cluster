@@ -13,8 +13,6 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus-data:/prometheus
-    networks:
-      - kafka-net
 
   init-grafana:
     image: debian:bookworm-slim
@@ -29,8 +27,6 @@ services:
     user: root
     volumes:
       - ./grafana-data:/var/lib/grafana
-    networks:
-      - kafka-net
 
   prometheus:
     image: prom/prometheus

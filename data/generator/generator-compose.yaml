@@ -10,7 +10,7 @@ services:
       - |
         /opt/logger.sh 5 10
     environment:
-      BOOTSTRAP_SERVER: "10.123.245.157:9092,10.123.245.166:9092,10.123.245.184:9092"
+      BOOTSTRAP_SERVER: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
       TOPIC_NAME: basic
 
   kafka-consumer:
@@ -28,6 +28,6 @@ services:
           -D \n\n \
           -q $${TOPIC_NAME}
     environment:
-      BOOTSTRAP_SERVER: "10.123.245.157:9092,10.123.245.166:9092,10.123.245.184:9092"
+      BOOTSTRAP_SERVER: "kafka1.test.lumu.net:9092,kafka2.test.lumu.net:9092,kafka3.test.lumu.net:9092"
       GROUP_ID: reader-group-id
       TOPIC_NAME: basic
